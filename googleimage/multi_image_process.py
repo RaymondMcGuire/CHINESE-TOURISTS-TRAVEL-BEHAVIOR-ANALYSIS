@@ -7,13 +7,14 @@ Created on Sun Jul  8 16:51:14 2018
 """
 
 from selenium import webdriver
+import random
 import os
 import socket
 import time
 
 
-img_path='/Users/raymondmg/Downloads/testimage/'
-output_path='/Users/raymondmg/Downloads/res/'
+img_path='D:/poject/github_project/chinese_travel_analyse/CHINESE-TOURISTS-TRAVEL-BEHAVIOR-ANALYSIS/googleimage/img/'
+output_path='D:/poject/github_project/chinese_travel_analyse/CHINESE-TOURISTS-TRAVEL-BEHAVIOR-ANALYSIS/googleimage/out/'
 timeout = 400
 socket.setdefaulttimeout(timeout)
 os.environ["PATH"] += os.pathsep + os.getcwd()
@@ -38,28 +39,31 @@ def main():
   file_list=getfilename(img_path)
   result_context = []
   original_name =[]
-  for i in range(len(file_list)):
-      extension = file_list[i].split('.')[1]
-      if extension not in extension_list:
-          continue
-      url = "https://www.google.co.jp/searchbyimage/upload"
-      driver = webdriver.Chrome()
-      driver.get(url)
-    	
-      headers = {}
-      headers['User-Agent'] = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
-      time.sleep(1)
-      file_input = driver.find_element_by_id("qbfile")
-      file_input.send_keys(img_path+file_list[i])
-      
-      result_url=driver.current_url
-      driver.get(result_url)
-      result_label = driver.find_element_by_xpath("//a[@class='fKDtNb']").text
-      str_label=str(result_label)
-      print(str_label)
-      original_name.append(file_list[i])
-      result_context.append(str_label)
-      driver.quit()
+  try:   
+      for i in range(len(file_list)):
+          extension = file_list[i].split('.')[1]
+          if extension not in extension_list:
+              continue
+          url = "https://www.google.co.jp/searchbyimage/upload"
+          driver = webdriver.Chrome()
+          driver.get(url)
+          rnd_time =random.uniform(1.0,2.0)	
+          time.sleep(rnd_time)
+          file_input = driver.find_element_by_id("qbfile")
+          file_input.send_keys(img_path+file_list[i])
+          
+          result_url=driver.current_url
+          driver.get(result_url)
+          result_label = driver.find_element_by_xpath("//a[@class='fKDtNb']").text
+          str_label=str(result_label)
+          print(str_label)
+          original_name.append(file_list[i])
+          result_context.append(str_label)
+          driver.quit()
+          rnd_time =random.uniform(1.0,5.0)
+          time.sleep(rnd_time)
+  except:
+        print("error")
   export_txtfile(original_name,result_context)
 if __name__ == "__main__":
 	main()
